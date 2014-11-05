@@ -92,6 +92,7 @@ WARNING
           rake.task("assets:clean").invoke(env: rake_env)
 
           cleanup_assets_cache
+          @cache.clear public_assets_folder
           @cache.store public_assets_folder
           @cache.store default_assets_cache
         else
