@@ -518,6 +518,8 @@ WARNING
         puts `ls -al .bundle`
         puts 'cat .bundle/config'
         puts `cat .bundle/config`
+        puts 'bundle config --help'
+        puts `bundle config --help`
         bundle_without = env("BUNDLE_WITHOUT") || "development:test"
         bundle_bin     = "bundle"
         bundle_command = "#{bundle_bin} install --without #{bundle_without} --path vendor/bundle --binstubs #{bundler_binstubs_path}"
