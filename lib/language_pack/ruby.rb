@@ -514,6 +514,7 @@ WARNING
         puts `cp -R vendor/libmcrypt/* /app/local/`
         puts `ls -al /app/local`
         puts `ls -al /app/local/include`
+        puts `bundle config --help`
 
         bundle_without = env("BUNDLE_WITHOUT") || "development:test"
         bundle_bin     = "bundle"
