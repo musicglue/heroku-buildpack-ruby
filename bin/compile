@@ -3,6 +3,35 @@
 # sync output
 $stdout.sync = true
 
+require 'fileutils'
+
+def log(string, format=false)
+  puts "#{format ? '-----> ' : '       '}#{string}"
+end
+
+heroku_bundle_config_path = File.join(ARGV[0], ".heroku_bundle", "config")
+bundle_config_path = File.join(ARGV[0], ".bundle", "config")
+if File.exists?(heroku_bundle_config_path)
+  log "Found Heroku specific bundle config, copying into place", true
+  FileUtils.mkdir_p File.dirname(bundle_config_path)
+  FileUtils.cp heroku_bundle_config_path, bundle_config_path
+end
+
+heroku_library_install_path = File.join(ARGV[0], ".libdependencies")
+if File.exists?(heroku_library_install_path)
+  log "Found Heroku dependencies to install, proceeding with installation", true
+  lines = File.read(heroku_library_install_path).lines
+  lines.each do |line|
+    log "Fetching Dependency: #{line}"
+    command1 = "curl -sL '#{line.chomp}' | tar xz -C #{ARGV[0]} --strip-components=1"
+    command2 = "curl -sL '#{line.chomp}' | tar xz -C /app --strip-components=1"
+    if !system(command1) || !system(command2)
+      puts "Failed to install dependencies"
+      Kernel.exit(1)
+    end
+  end
+end
+
 $:.unshift File.expand_path("../../lib", __FILE__)
 require "language_pack"
 require "language_pack/shell_helpers"
